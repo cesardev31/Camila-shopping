@@ -1,13 +1,15 @@
 const productService = require("../../service/productService");
+const { checkPermissions } = require("../middleware/permissionRole");
 
-exports.createProduct = async (req, res) => {
+exports.createProduct = async (req, res, next) => {
   try {
+    if (!(await checkPermissions(req, "createProduct"))) {
+      return res.status(403).json({ message: "Acceso denegado" });
+    }
     const product = await productService.createProduct(req.body);
     res.status(201).json(product);
   } catch (error) {
-    res
-      .status(400)
-      .json({ message: "Error al crear el producto", error: error.message });
+    next(error);
   }
 };
 

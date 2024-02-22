@@ -13,15 +13,30 @@
   ],
   "paths": {
     "/roles": {
-      "post": {
-        "summary": "Crea un nuevo Roll",
+      "get": {
+        "summary": "Obtiene todos los roles",
+        "description": "Retorna una lista de todos los roles disponibles.",
         "responses": {
-          "201": {
-            "description": "Roll creado"
+          "200": {
+            "description": "Lista de roles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Role"
+                  }
+                }
+              }
+            }
           }
-        },
+        }
+      },
+      "post": {
+        "summary": "Crea un nuevo Rol",
+        "description": "Agrega un nuevo rol a la base de datos.",
         "requestBody": {
-          "description": "Datos de los Roles",
+          "description": "Datos del Rol",
           "required": true,
           "content": {
             "application/json": {
@@ -29,6 +44,159 @@
                 "$ref": "#/components/schemas/Role"
               }
             }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Rol creado"
+          }
+        }
+      }
+    },
+    "/roles/{id}": {
+      "put": {
+        "summary": "Actualiza un rol existente",
+        "description": "Actualiza los detalles del rol basado en el ID proporcionado.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Role"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Rol actualizado exitosamente"
+          },
+          "404": {
+            "description": "Rol no encontrado"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Elimina un rol existente",
+        "description": "Elimina el rol basado en el ID proporcionado.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Rol eliminado exitosamente"
+          },
+          "404": {
+            "description": "Rol no encontrado"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Lista todos los usuarios",
+        "description": "Retorna una lista de todos los usuarios.",
+        "responses": {
+          "200": {
+            "description": "Una lista de usuarios",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Crea un nuevo usuario",
+        "description": "Agrega un nuevo usuario a la base de datos.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario creado"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "put": {
+        "summary": "Actualiza un usuario",
+        "description": "Actualiza los detalles de un usuario existente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID del usuario a actualizar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuario actualizado"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Elimina un usuario",
+        "description": "Elimina un usuario de la base de datos.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID del usuario a eliminar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Usuario eliminado"
           }
         }
       }
@@ -98,6 +266,32 @@
             "type": "string"
           }
         }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "document": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "firstName": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "lastName": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "rolesId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": ["document", "firstName", "lastName", "rolesId"]
       }
     }
   }

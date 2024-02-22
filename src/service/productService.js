@@ -1,16 +1,19 @@
-const Product = require("../models/product");
+const Product = require("../models/Product");
 
 const createProduct = async (productData) => {
-  // Aquí podrías añadir lógica de negocio antes de crear el producto
   return await Product.create(productData);
 };
 
 const listProducts = async () => {
-  // Aquí podrías añadir lógica de negocio antes de devolver los productos
   return await Product.findAll();
+};
+
+const getProductById = async (productId) => {
+  return await Product.findByPk(productId);
 };
 
 module.exports = {
   createProduct,
   listProducts,
+  getProductById
 };
