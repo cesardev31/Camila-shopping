@@ -1,0 +1,104 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de Camila Shopping",
+    "version": "1.0.0",
+    "description": "Esta es una API para gestionar las operaciones de Camila Shopping."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3201/api/v1",
+      "description": "Servidor de desarrollo"
+    }
+  ],
+  "paths": {
+    "/roles": {
+      "post": {
+        "summary": "Crea un nuevo Roll",
+        "responses": {
+          "201": {
+            "description": "Roll creado"
+          }
+        },
+        "requestBody": {
+          "description": "Datos de los Roles",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Role"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "summary": "Lista todos los productos",
+        "responses": {
+          "200": {
+            "description": "Una lista de productos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Crea un nuevo producto",
+        "responses": {
+          "201": {
+            "description": "Producto creado"
+          }
+        },
+        "requestBody": {
+          "description": "Datos del producto",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "required": ["name", "price"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
