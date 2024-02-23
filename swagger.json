@@ -12,198 +12,10 @@
     }
   ],
   "paths": {
-    "/roles": {
-      "get": {
-        "summary": "Obtiene todos los roles",
-        "description": "Retorna una lista de todos los roles disponibles.",
-        "responses": {
-          "200": {
-            "description": "Lista de roles",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Role"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Crea un nuevo Rol",
-        "description": "Agrega un nuevo rol a la base de datos.",
-        "requestBody": {
-          "description": "Datos del Rol",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Role"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Rol creado"
-          }
-        }
-      }
-    },
-    "/roles/{id}": {
-      "put": {
-        "summary": "Actualiza un rol existente",
-        "description": "Actualiza los detalles del rol basado en el ID proporcionado.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Role"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Rol actualizado exitosamente"
-          },
-          "404": {
-            "description": "Rol no encontrado"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Elimina un rol existente",
-        "description": "Elimina el rol basado en el ID proporcionado.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Rol eliminado exitosamente"
-          },
-          "404": {
-            "description": "Rol no encontrado"
-          }
-        }
-      }
-    },
-    "/users": {
-      "get": {
-        "summary": "Lista todos los usuarios",
-        "description": "Retorna una lista de todos los usuarios.",
-        "responses": {
-          "200": {
-            "description": "Una lista de usuarios",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/User"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Crea un nuevo usuario",
-        "description": "Agrega un nuevo usuario a la base de datos.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Usuario creado"
-          }
-        }
-      }
-    },
-    "/users/{id}": {
-      "put": {
-        "summary": "Actualiza un usuario",
-        "description": "Actualiza los detalles de un usuario existente.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID del usuario a actualizar",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Usuario actualizado"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Elimina un usuario",
-        "description": "Elimina un usuario de la base de datos.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID del usuario a eliminar",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Usuario eliminado"
-          }
-        }
-      }
-    },
     "/products": {
       "get": {
         "summary": "Lista todos los productos",
+        "tags": ["Productos"],
         "responses": {
           "200": {
             "description": "Una lista de productos",
@@ -217,25 +29,775 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Error al listar los productos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       },
       "post": {
         "summary": "Crea un nuevo producto",
-        "responses": {
-          "201": {
-            "description": "Producto creado"
+        "tags": ["Productos"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthHeader"
           }
-        },
+        ],
         "requestBody": {
-          "description": "Datos del producto",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Product"
+                "$ref": "#/components/schemas/ProductInput"
               }
             }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Producto creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acceso denegado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al crear el producto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sales": {
+      "post": {
+        "summary": "Crea una nueva venta",
+        "tags": ["Ventas"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaleInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Venta creada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sale"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acceso denegado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Producto o usuario no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al crear la venta",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Obtiene todas las ventas",
+        "tags": ["Ventas"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de ventas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Sale"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acceso denegado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al obtener las ventas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sales/{id}": {
+      "put": {
+        "summary": "Actualiza una venta específica",
+        "tags": ["Ventas"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID único de la venta a actualizar",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaleInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Venta actualizada correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sale"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acceso denegado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Venta no encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al actualizar la venta",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Elimina una venta específica",
+        "tags": ["Ventas"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID único de la venta a eliminar",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Venta eliminada correctamente"
+          },
+          "403": {
+            "description": "Acceso denegado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Venta no encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al eliminar la venta",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "summary": "Crear un nuevo usuario",
+        "tags": ["Usuarios"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al crear el usuario",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Obtener todos los usuarios",
+        "tags": ["Usuarios"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de usuarios obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al obtener los usuarios",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "put": {
+        "summary": "Actualizar un usuario existente",
+        "tags": ["Usuarios"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID del usuario a actualizar"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuario actualizado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al actualizar el usuario",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar un usuario",
+        "tags": ["Usuarios"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID del usuario a eliminar"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Usuario eliminado exitosamente"
+          },
+          "404": {
+            "description": "Usuario no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al eliminar el usuario",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles": {
+      "post": {
+        "summary": "Inicializa los roles en la base de datos",
+        "tags": ["Roles"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Roles inicializados correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acceso denegado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al inicializar los roles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Lista todos los roles disponibles",
+        "tags": ["Roles"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Una lista de roles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Role"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acceso denegado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al obtener los roles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles/{id}": {
+      "put": {
+        "summary": "Actualiza un rol específico",
+        "tags": ["Roles"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID del rol a actualizar",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Rol actualizado correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Role"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acceso denegado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rol no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Elimina un rol específico",
+        "tags": ["Roles"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AuthHeader"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID del rol a eliminar",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Rol eliminado correctamente"
+          },
+          "403": {
+            "description": "Acceso denegado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rol no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/closing/daily-closing/{date}": {
+      "get": {
+        "summary": "Calcula el total de ventas para un día específico",
+        "tags": ["Cierre"],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "description": "Fecha del cierre en formato YYYY-MM-DD",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "Auth",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticación que es el ID del usuario",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Total de ventas del día",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "totalSalesValue": {
+                      "type": "number",
+                      "description": "El valor total de las ventas del día"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al calcular el total de ventas del día"
+          }
+        }
+      }
+    },
+    "/closing/monthly-balance/{month}": {
+      "get": {
+        "summary": "Calcula el total de ventas para un mes específico",
+        "tags": ["Cierre"],
+        "parameters": [
+          {
+            "name": "month",
+            "in": "path",
+            "required": true,
+            "description": "Mes del balance en formato YYYY-MM",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "Auth",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticación que es el ID del usuario",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Total de ventas del mes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "totalSalesValue": {
+                      "type": "number",
+                      "description": "El valor total de las ventas del mes"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al calcular el total de ventas del mes"
           }
         }
       }
@@ -243,55 +805,207 @@
   },
   "components": {
     "schemas": {
-      "Product": {
+      "Role": {
         "type": "object",
-        "required": ["name", "price"],
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Identificador único del rol"
+          },
           "name": {
-            "type": "string"
-          },
-          "price": {
-            "type": "integer"
-          },
-          "description": {
-            "type": "string"
+            "type": "string",
+            "description": "Nombre del rol"
           }
         }
       },
-      "Role": {
+      "RoleInput": {
         "type": "object",
-        "required": ["name"],
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "Nombre del rol para actualizar"
           }
         }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Identificador único del producto"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre del producto"
+          },
+          "price": {
+            "type": "number",
+            "description": "Precio del producto"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descriccion del producto"
+          }
+        }
+      },
+      "ProductInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nombre del producto"
+          },
+          "price": {
+            "type": "number",
+            "description": "Precio del producto"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descriccion del producto"
+          }
+        }
+      },
+      "Sale": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID de la venta"
+          },
+          "productsId": {
+            "type": "string",
+            "description": "ID del producto vendido"
+          },
+          "qty": {
+            "type": "integer",
+            "description": "Cantidad vendida"
+          },
+          "usersId": {
+            "type": "string",
+            "description": "ID del usuario que realizó la venta"
+          },
+          "saleAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Fecha y hora de la venta"
+          }
+        }
+      },
+      "SaleInput": {
+        "type": "object",
+        "properties": {
+          "productsId": {
+            "type": "string",
+            "description": "ID del producto vendido"
+          },
+          "qty": {
+            "type": "integer",
+            "description": "Cantidad vendida"
+          },
+          "usersId": {
+            "type": "string",
+            "description": "ID del usuario que realizó la venta"
+          }
+        },
+        "required": ["productsId", "qty", "usersId"]
       },
       "User": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
-            "format": "uuid"
+            "description": "ID del usuario"
           },
-          "document": {
+          "name": {
             "type": "string",
-            "maxLength": 20
+            "description": "Nombre del usuario"
           },
-          "firstName": {
+          "email": {
             "type": "string",
-            "maxLength": 30
+            "format": "email",
+            "description": "Correo electrónico del usuario"
           },
-          "lastName": {
+          "role": {
             "type": "string",
-            "maxLength": 30
+            "description": "Rol del usuario"
+          }
+        }
+      },
+      "UserInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nombre del usuario"
           },
-          "rolesId": {
+          "email": {
             "type": "string",
-            "format": "uuid"
+            "format": "email",
+            "description": "Correo electrónico del usuario"
+          },
+          "role": {
+            "type": "string",
+            "description": "Rol del usuario"
           }
         },
-        "required": ["document", "firstName", "lastName", "rolesId"]
+        "required": ["name", "email", "role"]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Mensaje de error detallando lo que salió mal."
+          },
+          "error": {
+            "type": "string",
+            "description": "Información adicional sobre el error."
+          }
+        }
+      },
+      "TotalSalesValueResponse": {
+        "type": "object",
+        "properties": {
+          "totalSalesValue": {
+            "type": "number",
+            "description": "El valor total de las ventas en el período especificado."
+          }
+        }
+      }
+    },
+    "parameters": {
+      "AuthHeader": {
+        "name": "Auth",
+        "in": "header",
+        "required": true,
+        "description": "Token de autenticación que es el ID del usuario",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Acceso no autorizado debido a falta de credenciales válidas.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "NotFoundError": {
+        "description": "El recurso solicitado no fue encontrado.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
       }
     }
   }
