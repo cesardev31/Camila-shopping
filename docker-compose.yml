@@ -6,6 +6,7 @@ services:
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
     environment:
       - POSTGRES_DB=xxxxxxxx
       - POSTGRES_USER=xxxxxxx

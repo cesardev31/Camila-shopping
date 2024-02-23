@@ -20,6 +20,10 @@ const permissions = {
     "listRoles",
     "updateRole",
     "deleteRole",
+    "updateUser",
+    "createUser",
+    "listUsers",
+    "deleteUser",
   ],
   employee: ["listUsers"],
   everyone: ["createSale", "getAllSales"],
@@ -30,14 +34,16 @@ exports.checkPermissions = (action) => async (req, res, next) => {
   try {
     const userId = req.header("Auth");
     const role = await UserService.getUserRole(userId);
-
+    console.log(role);
     if (!role || !permissions[role]?.includes(action)) {
-      // Corregido para quitar .name
+      console.log(role);
+      console.log(`Acción solicitada: ${action}, Rol: ${role}`);
+
       return res.status(403).json({ message: "Acceso denegado" });
     }
     next();
   } catch (error) {
-    console.error(error); // Log del error para más detalles
+    console.error(error);
     next(error);
   }
 };

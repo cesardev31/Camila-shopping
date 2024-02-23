@@ -918,39 +918,51 @@
             "type": "string",
             "description": "ID del usuario"
           },
-          "name": {
+          "document": {
             "type": "string",
+            "maxLength": 20,
+            "description": "Documento de identidad del usuario"
+          },
+          "firstName": {
+            "type": "string",
+            "maxLength": 30,
             "description": "Nombre del usuario"
           },
-          "email": {
+          "lastName": {
             "type": "string",
-            "format": "email",
-            "description": "Correo electrónico del usuario"
+            "maxLength": 30,
+            "description": "Apellido del usuario"
           },
-          "role": {
+          "rolesId": {
             "type": "string",
-            "description": "Rol del usuario"
+            "description": "ID del rol del usuario"
           }
         }
       },
       "UserInput": {
         "type": "object",
         "properties": {
-          "name": {
+          "document": {
             "type": "string",
+            "maxLength": 20,
+            "description": "Documento de identidad del usuario"
+          },
+          "firstName": {
+            "type": "string",
+            "maxLength": 30,
             "description": "Nombre del usuario"
           },
-          "email": {
+          "lastName": {
             "type": "string",
-            "format": "email",
-            "description": "Correo electrónico del usuario"
+            "maxLength": 30,
+            "description": "Apellido del usuario"
           },
-          "role": {
+          "rolesId": {
             "type": "string",
-            "description": "Rol del usuario"
+            "description": "ID del rol del usuario"
           }
         },
-        "required": ["name", "email", "role"]
+        "required": ["document", "firstName", "lastName", "rolesId"]
       },
       "ErrorResponse": {
         "type": "object",
